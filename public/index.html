@@ -130,6 +130,34 @@
       </div>
       <p class="empty-tip hidden" id="convert-empty">还没有换算结果</p>
     </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>成组时刻检查</h2>
+        <div class="filters">
+          <label class="inline" data-field="inspectZone">默认时区<select id="inspect-zone"></select></label>
+          <button type="button" id="inspect-run">成组检查</button>
+        </div>
+      </div>
+      <p class="convert-meta">每行一条自由文本；条里写了时区名（如 America/New_York）就按条里的，没写就用默认时区。日期不存在、时刻过二十四点、次序颠倒、一串两个日期、落在夏令时缺口里都会逐条标出</p>
+      <textarea id="inspect-input" rows="7" placeholder="每行一条，例如：&#10;2026年9月20日 9点30分&#10;2026-02-30 09:30&#10;09:30 2026-09-20&#10;2026-03-08 02:30 America/New_York"></textarea>
+      <p class="counts hidden" id="inspect-counts"></p>
+      <div class="table-wrap">
+        <table class="grid inspect-grid">
+          <thead>
+            <tr>
+              <th class="col-idx">#</th>
+              <th>原始文本</th>
+              <th>结论</th>
+              <th>问题处</th>
+              <th>规范写法 / 建议写法</th>
+            </tr>
+          </thead>
+          <tbody id="inspect-body"></tbody>
+        </table>
+      </div>
+      <p class="empty-tip" id="inspect-empty">还没有检查过，每行写一条时刻文本后点“成组检查”</p>
+    </section>
   </main>
 
   <script src="app.js"></script>

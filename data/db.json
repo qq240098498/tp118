@@ -1,0 +1,226 @@
+{
+  "zones": [
+    {
+      "id": "zone-1001",
+      "name": "Asia/Shanghai",
+      "displayName": "中国标准时间",
+      "offsetMinutes": 480,
+      "usesDst": false,
+      "dstOffsetMinutes": null,
+      "dstStart": null,
+      "dstEnd": null,
+      "fromYear": 1949,
+      "toYear": null,
+      "note": "全国统一使用，不实行夏令时",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1002",
+      "name": "Asia/Kolkata",
+      "displayName": "印度标准时间",
+      "offsetMinutes": 330,
+      "usesDst": false,
+      "dstOffsetMinutes": null,
+      "dstStart": null,
+      "dstEnd": null,
+      "fromYear": 1947,
+      "toYear": null,
+      "note": "偏移带半小时",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1003",
+      "name": "Asia/Kathmandu",
+      "displayName": "尼泊尔时间",
+      "offsetMinutes": 345,
+      "usesDst": false,
+      "dstOffsetMinutes": null,
+      "dstStart": null,
+      "dstEnd": null,
+      "fromYear": 1986,
+      "toYear": null,
+      "note": "偏移带三刻",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1004",
+      "name": "UTC",
+      "displayName": "协调世界时",
+      "offsetMinutes": 0,
+      "usesDst": false,
+      "dstOffsetMinutes": null,
+      "dstStart": null,
+      "dstEnd": null,
+      "fromYear": 1972,
+      "toYear": null,
+      "note": "换算的基准",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1005",
+      "name": "America/New_York",
+      "displayName": "美国东部时间",
+      "offsetMinutes": -300,
+      "usesDst": true,
+      "dstOffsetMinutes": -240,
+      "dstStart": {
+        "month": 3,
+        "week": "2",
+        "weekday": 0,
+        "hour": 2,
+        "minute": 0
+      },
+      "dstEnd": {
+        "month": 11,
+        "week": "1",
+        "weekday": 0,
+        "hour": 2,
+        "minute": 0
+      },
+      "fromYear": 1967,
+      "toYear": null,
+      "note": "三月第二个周日凌晨开始，十一月第一个周日凌晨结束",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1006",
+      "name": "Europe/London",
+      "displayName": "英国时间",
+      "offsetMinutes": 0,
+      "usesDst": true,
+      "dstOffsetMinutes": 60,
+      "dstStart": {
+        "month": 3,
+        "week": "last",
+        "weekday": 0,
+        "hour": 1,
+        "minute": 0
+      },
+      "dstEnd": {
+        "month": 10,
+        "week": "last",
+        "weekday": 0,
+        "hour": 2,
+        "minute": 0
+      },
+      "fromYear": 1972,
+      "toYear": null,
+      "note": "切换时刻落在当地凌晨一点与两点",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1007",
+      "name": "Australia/Sydney",
+      "displayName": "澳大利亚东部时间",
+      "offsetMinutes": 600,
+      "usesDst": true,
+      "dstOffsetMinutes": 660,
+      "dstStart": {
+        "month": 10,
+        "week": "1",
+        "weekday": 0,
+        "hour": 2,
+        "minute": 0
+      },
+      "dstEnd": {
+        "month": 4,
+        "week": "1",
+        "weekday": 0,
+        "hour": 3,
+        "minute": 0
+      },
+      "fromYear": 1971,
+      "toYear": null,
+      "note": "南半球，夏令时跨年，开始月份晚于结束月份",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1008",
+      "name": "Pacific/Chatham",
+      "displayName": "查塔姆群岛时间",
+      "offsetMinutes": 765,
+      "usesDst": true,
+      "dstOffsetMinutes": 825,
+      "dstStart": {
+        "month": 9,
+        "week": "last",
+        "weekday": 0,
+        "hour": 2,
+        "minute": 45
+      },
+      "dstEnd": {
+        "month": 4,
+        "week": "1",
+        "weekday": 0,
+        "hour": 3,
+        "minute": 45
+      },
+      "fromYear": 1974,
+      "toYear": null,
+      "note": "偏移与切换时刻都带三刻",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1009",
+      "name": "America/Sao_Paulo",
+      "displayName": "巴西利亚时间",
+      "offsetMinutes": -180,
+      "usesDst": true,
+      "dstOffsetMinutes": -120,
+      "dstStart": {
+        "month": 11,
+        "week": "1",
+        "weekday": 0,
+        "hour": 0,
+        "minute": 0
+      },
+      "dstEnd": {
+        "month": 2,
+        "week": "3",
+        "weekday": 0,
+        "hour": 0,
+        "minute": 0
+      },
+      "fromYear": 1985,
+      "toYear": 2019,
+      "note": "二〇一九年起不再实行夏令时",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    },
+    {
+      "id": "zone-1010",
+      "name": "Asia/Taipei",
+      "displayName": "台北时间",
+      "offsetMinutes": 480,
+      "usesDst": true,
+      "dstOffsetMinutes": 540,
+      "dstStart": {
+        "month": 4,
+        "week": "1",
+        "weekday": 0,
+        "hour": 0,
+        "minute": 0
+      },
+      "dstEnd": {
+        "month": 9,
+        "week": "last",
+        "weekday": 0,
+        "hour": 0,
+        "minute": 0
+      },
+      "fromYear": 1945,
+      "toYear": 1979,
+      "note": "早期实行过夏令时，现已停止",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
+    }
+  ]
+}

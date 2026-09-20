@@ -155,12 +155,15 @@ function renderZones() {
 }
 
 function renderConvertZoneOptions() {
-  const select = el('convert-zone');
-  const current = select.value;
-  select.innerHTML = state.zones
+  const options = state.zones
     .map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}　${escapeHtml(item.displayName)}</option>`)
     .join('');
-  if (state.zones.some((item) => item.id === current)) select.value = current;
+  ['convert-zone', 'inspect-zone'].forEach((id) => {
+    const select = el(id);
+    const current = select.value;
+    select.innerHTML = options;
+    if (state.zones.some((item) => item.id === current)) select.value = current;
+  });
 }
 
 function openZoneForm(zone) {
@@ -280,6 +283,67 @@ function renderConvert(result) {
   el('convert-empty').classList.toggle('hidden', result.results.length > 0);
 }
 
+// 成组检查：每行一条提交，结论逐条回到表格里，某一条不成立不影响其余行
+async function runInspect() {
+  clearNotice();
+  const zoneId = el('inspect-zone').value;
+  const lines = el('inspect-input').value.split(/\r?\n/).map((line) => line.trim()).filter((line) => line.length > 0);
+  if (lines.length === 0) {
+    notify('每行写一条时刻文本，至少要有一条', 'error');
+    return;
+  }
+  try {
+    const result = await request('/api/inspect', {
+      method: 'POST',
+      body: JSON.stringify({ zoneId, items: lines }),
+    });
+    renderInspect(result);
+  } catch (err) {
+    notify(err.message, 'error');
+  }
+}
+
+function renderInspect(result) {
+  const zoneText = result.zone ? `默认时区 ${result.zone.name}` : '未设默认时区（每条要自己写时区）';
+  el('inspect-counts').textContent = `共 ${result.total} 条：成立 ${result.okCount} 条，不成立 ${result.invalidCount} 条；${zoneText}`;
+  el('inspect-counts').classList.remove('hidden');
+
+  const body = el('inspect-body');
+  body.innerHTML = result.items.map((item) => {
+    const statusTag = item.status === 'ok'
+      ? '<span class="tag on">成立</span>'
+      : '<span class="tag bad">不成立</span>';
+    const issueHtml = item.issues.length
+      ? `<ul class="issue-list">${item.issues.map((issue) => {
+        const where = issue.at && issue.at.position ? `<span class="issue-where">${escapeHtml(issue.at.position)}</span>` : '';
+        return `<li class="issue-${escapeHtml(issue.code.toLowerCase())}">
+            <span class="issue-part">${escapeHtml(issue.part)}</span>${where}
+            <span class="issue-msg">${escapeHtml(issue.message)}</span>
+          </li>`;
+      }).join('')}</ul>`
+      : '<span class="issue-none">没有发现问题</span>';
+    let answerHtml;
+    if (item.canonical) {
+      answerHtml = `<div class="canonical">
+          <span class="mono">${escapeHtml(item.canonical.text)}</span>
+          <span class="canonical-meta">${escapeHtml(item.canonical.weekday)}　${escapeHtml(item.canonical.offsetText)}${item.parsed.dst ? '（夏令时中）' : ''}　UTC ${escapeHtml(item.canonical.utc)}</span>
+        </div>`;
+    } else if (item.suggestion) {
+      answerHtml = `<div class="suggestion"><span class="suggestion-label">建议写法</span><span class="mono">${escapeHtml(item.suggestion)}</span></div>`;
+    } else {
+      answerHtml = '<span class="issue-none">—</span>';
+    }
+    return `<tr class="inspect-row inspect-${item.status}">
+      <td class="col-idx">${item.index + 1}</td>
+      <td class="input-cell">${escapeHtml(item.input)}</td>
+      <td>${statusTag}</td>
+      <td class="issue-cell">${issueHtml}</td>
+      <td class="answer-cell">${answerHtml}</td>
+    </tr>`;
+  }).join('');
+  el('inspect-empty').classList.toggle('hidden', result.items.length > 0);
+}
+
 // 列表上的操作用事件委托统一处理，列表重绘之后不需要重新绑定
 document.addEventListener('click', async (event) => {
   const node = event.target.closest('button');
@@ -330,6 +394,7 @@ el('zone-filter-dst').addEventListener('change', () => {
   loadZones().catch((err) => notify(err.message, 'error'));
 });
 el('convert-run').addEventListener('click', runConvert);
+el('inspect-run').addEventListener('click', runInspect);
 el('operator').addEventListener('change', () => {
   window.localStorage.setItem(OPERATOR_KEY, currentOperator());
 });

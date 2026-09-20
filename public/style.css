@@ -283,6 +283,152 @@ tr.source-row td {
   color: #8a5a00;
 }
 
+.tag.bad {
+  background: #fdeeee;
+  color: var(--danger);
+}
+
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+table.inspect-grid {
+  min-width: 880px;
+  table-layout: fixed;
+}
+
+table.inspect-grid th.col-idx,
+table.inspect-grid td.col-idx {
+  width: 40px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+table.inspect-grid td {
+  white-space: normal;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+td.input-cell {
+  width: 24%;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12.5px;
+}
+
+td.issue-cell {
+  width: 40%;
+}
+
+td.answer-cell {
+  width: 28%;
+}
+
+tr.inspect-invalid td {
+  background: #fff8f8;
+}
+
+tr.inspect-ok td.col-idx {
+  color: var(--ok);
+}
+
+.issue-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.issue-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12.5px;
+}
+
+.issue-part {
+  padding: 0 6px;
+  border-radius: 3px;
+  background: #eef0f3;
+  color: var(--ink-soft);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.issue-where {
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--warn-bg);
+  color: #8a5a00;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.issue-dst_gap .issue-part,
+.issue-dst_gap .issue-where {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.issue-date_not_exist .issue-part,
+.issue-time_out_of_range .issue-part {
+  background: #fdeeee;
+  color: var(--danger);
+}
+
+.issue-msg {
+  flex: 1 1 200px;
+}
+
+.issue-none {
+  color: var(--ink-soft);
+  font-size: 12.5px;
+}
+
+.canonical {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.canonical-meta {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+}
+
+.suggestion-label {
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--warn-bg);
+  color: #8a5a00;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
 .empty-tip {
   margin: 12px 0 0;
   color: var(--ink-soft);
