@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>时区与时间换算工作台</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>时区与时间换算工作台</h1>
+      <p class="subtitle">登记各地时区与夏令时规则，把一个时刻换算到所有时区，看清华盛顿与上海谁先跨天</p>
+    </div>
+    <div class="topbar-right">
+      <label class="operator" data-field="operator">当前操作者
+        <input id="operator" placeholder="填上你的名字" maxlength="40">
+      </label>
+      <div class="health" id="health">连接中…</div>
+    </div>
+  </header>
+
+  <div class="notice hidden" id="notice"></div>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <h2>时区档案</h2>
+        <div class="filters">
+          <select id="zone-filter-dst">
+            <option value="">全部时区</option>
+            <option value="yes">实行夏令时</option>
+            <option value="no">不实行夏令时</option>
+          </select>
+          <input id="zone-filter-keyword" placeholder="搜索名称、显示名、备注" maxlength="40">
+          <button type="button" id="zone-filter-apply">筛选</button>
+          <button type="button" id="zone-filter-reset" class="ghost">重置</button>
+          <button type="button" id="zone-refresh" class="ghost">刷新</button>
+          <button type="button" id="zone-new">新建档案</button>
+        </div>
+      </div>
+      <p class="counts" id="zone-counts"></p>
+      <div class="table-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              <th>时区名称</th>
+              <th>显示名称</th>
+              <th>标准偏移</th>
+              <th>夏令时</th>
+              <th>夏令时偏移</th>
+              <th>切换规则</th>
+              <th>生效年份</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="zone-body"></tbody>
+        </table>
+      </div>
+      <p class="empty-tip hidden" id="zone-empty">当前筛选条件下没有时区档案</p>
+
+      <form class="entry-form hidden" id="zone-form" autocomplete="off">
+        <h3 id="zone-form-title">新建档案</h3>
+        <div class="form-row">
+          <label data-field="name">时区名称<input id="zone-name" placeholder="例如 Asia/Tokyo" maxlength="40"></label>
+          <label data-field="displayName">显示名称<input id="zone-display" placeholder="例如 日本标准时间" maxlength="40"></label>
+          <label data-field="offsetMinutes">标准偏移（分钟）<input id="zone-offset" placeholder="例如东八区填 480" maxlength="6"></label>
+        </div>
+        <div class="form-row">
+          <label class="check" data-field="usesDst"><input type="checkbox" id="zone-uses-dst"> 实行夏令时</label>
+          <label data-field="dstOffsetMinutes">夏令时偏移（分钟）<input id="zone-dst-offset" placeholder="例如 540" maxlength="6"></label>
+        </div>
+        <div class="form-row rule-row">
+          <span class="rule-label" data-field="dstStart">开始规则</span>
+          <label>月<select id="zone-start-month"></select></label>
+          <label>第几个<select id="zone-start-week"></select></label>
+          <label>星期<select id="zone-start-weekday"></select></label>
+          <label>时<input id="zone-start-hour" placeholder="2" maxlength="2"></label>
+          <label>分<input id="zone-start-minute" placeholder="0" maxlength="2"></label>
+        </div>
+        <div class="form-row rule-row">
+          <span class="rule-label" data-field="dstEnd">结束规则</span>
+          <label>月<select id="zone-end-month"></select></label>
+          <label>第几个<select id="zone-end-week"></select></label>
+          <label>星期<select id="zone-end-weekday"></select></label>
+          <label>时<input id="zone-end-hour" placeholder="2" maxlength="2"></label>
+          <label>分<input id="zone-end-minute" placeholder="0" maxlength="2"></label>
+        </div>
+        <div class="form-row">
+          <label data-field="fromYear">开始年份<input id="zone-from-year" placeholder="例如 1971" maxlength="4"></label>
+          <label data-field="toYear">结束年份<input id="zone-to-year" placeholder="留空表示至今" maxlength="4"></label>
+          <label class="full" data-field="note">备注<input id="zone-note" placeholder="这条档案有什么需要留意的" maxlength="200"></label>
+        </div>
+        <div class="form-actions">
+          <button type="submit">保存</button>
+          <button type="button" id="zone-cancel" class="ghost">取消</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>换算台</h2>
+        <div class="filters">
+          <label class="inline" data-field="date">日期<input id="convert-date" type="date"></label>
+          <label class="inline" data-field="time">时刻<input id="convert-time" placeholder="例如 09:30" maxlength="5"></label>
+          <label class="inline" data-field="zoneId">来源时区<select id="convert-zone"></select></label>
+          <button type="button" id="convert-run">换算一遍</button>
+        </div>
+      </div>
+      <p class="convert-meta" id="convert-meta">还没有换算过，填好日期、时刻与来源时区点右侧按钮</p>
+      <div class="table-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              <th>时区</th>
+              <th>显示名称</th>
+              <th>当地日期</th>
+              <th>当地时刻</th>
+              <th>星期</th>
+              <th>与来源同天</th>
+              <th>偏移</th>
+              <th>与来源时区相差</th>
+              <th>夏令时</th>
+            </tr>
+          </thead>
+          <tbody id="convert-body"></tbody>
+        </table>
+      </div>
+      <p class="empty-tip hidden" id="convert-empty">还没有换算结果</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
