@@ -130,6 +130,35 @@
       </div>
       <p class="empty-tip hidden" id="convert-empty">还没有换算结果</p>
     </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>批量检查</h2>
+        <div class="filters">
+          <label class="inline" data-field="checkZoneId">时区<select id="check-zone"></select></label>
+          <button type="button" id="check-run">检查这一批</button>
+        </div>
+      </div>
+      <p class="counts">一行一条，日期在前时刻在后，例如 2026-09-20 09:30；逐条独立给结论，单条不成立不影响其它条目</p>
+      <textarea id="check-items" data-field="items" rows="6" placeholder="2026-09-20 09:30&#10;2026-02-30 25:30&#10;09:30 2026-09-20"></textarea>
+      <p class="convert-meta" id="check-meta">还没有检查过，写好一批内容点右上角按钮</p>
+      <div class="table-wrap">
+        <table class="grid">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>内容</th>
+              <th>结论</th>
+              <th>规范写法</th>
+              <th>问题与位置</th>
+              <th>建议写法</th>
+            </tr>
+          </thead>
+          <tbody id="check-body"></tbody>
+        </table>
+      </div>
+      <p class="empty-tip hidden" id="check-empty">还没有检查结果</p>
+    </section>
   </main>
 
   <script src="app.js"></script>

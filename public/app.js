@@ -5,6 +5,7 @@ const state = {
   counts: { total: 0, dstCount: 0, noDstCount: 0 },
   editingId: '',
   lastConvert: null,
+  lastCheck: null,
 };
 
 const MONTHS = [
@@ -131,7 +132,7 @@ async function loadZones() {
   state.zones = payload.zones || [];
   state.counts = { total: payload.total || 0, dstCount: payload.dstCount || 0, noDstCount: payload.noDstCount || 0 };
   renderZones();
-  renderConvertZoneOptions();
+  renderZoneOptions();
 }
 
 function renderZones() {
@@ -154,13 +155,17 @@ function renderZones() {
   el('zone-empty').classList.toggle('hidden', state.zones.length > 0);
 }
 
-function renderConvertZoneOptions() {
-  const select = el('convert-zone');
-  const current = select.value;
-  select.innerHTML = state.zones
+// 换算台与批量检查的来源时区下拉用同一份清单，选中值尽量保留
+function renderZoneOptions() {
+  const options = state.zones
     .map((item) => `<option value="${escapeHtml(item.id)}">${escapeHtml(item.name)}　${escapeHtml(item.displayName)}</option>`)
     .join('');
-  if (state.zones.some((item) => item.id === current)) select.value = current;
+  ['convert-zone', 'check-zone'].forEach((id) => {
+    const select = el(id);
+    const current = select.value;
+    select.innerHTML = options;
+    if (state.zones.some((item) => item.id === current)) select.value = current;
+  });
 }
 
 function openZoneForm(zone) {
@@ -280,6 +285,52 @@ function renderConvert(result) {
   el('convert-empty').classList.toggle('hidden', result.results.length > 0);
 }
 
+// 批量检查：一行一条送出去，逐条把结论、规范写法与问题位置列出来
+async function runCheck() {
+  clearNotice();
+  clearFieldMarks();
+  const lines = el('check-items').value.split(/\r?\n/);
+  while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
+  if (!lines.length) {
+    notify('请先写上几行要检查的内容', 'error');
+    markField('items');
+    return;
+  }
+  try {
+    const result = await request('/api/check', {
+      method: 'POST',
+      body: JSON.stringify({ zoneId: el('check-zone').value, items: lines }),
+    });
+    state.lastCheck = result;
+    renderCheck(result);
+  } catch (err) {
+    notify(err.message, 'error');
+    markField(err.field === 'zoneId' ? 'checkZoneId' : err.field);
+  }
+}
+
+function renderCheck(result) {
+  const { summary } = result;
+  el('check-meta').textContent = `时区 ${result.zone.name}（${result.zone.displayName}，${result.zone.offsetText}），共 ${summary.total} 条：成立 ${summary.ok} 条，不成立 ${summary.failed} 条；检查时刻 ${formatTime(result.checkedAt)}`;
+  const body = el('check-body');
+  body.innerHTML = result.results.map((item) => {
+    const problems = item.problems.map((p) => {
+      const where = p.position >= 0 ? ` <span class="pos">第 ${p.position + 1} 字起</span>` : '';
+      return `<li>${escapeHtml(p.message)}${where}</li>`;
+    }).join('');
+    const input = typeof item.input === 'string' ? item.input : JSON.stringify(item.input);
+    return `<tr>
+      <td class="mono">${item.index + 1}</td>
+      <td class="mono check-input">${escapeHtml(input)}</td>
+      <td>${item.ok ? '<span class="tag on">成立</span>' : '<span class="tag bad">不成立</span>'}</td>
+      <td class="mono">${item.normalized ? `${escapeHtml(item.normalized.text)} ${escapeHtml(item.normalized.weekday)}` : '—'}</td>
+      <td class="problem-cell">${problems ? `<ul class="problem-list">${problems}</ul>` : '—'}</td>
+      <td class="mono">${item.suggestion ? escapeHtml(item.suggestion) : '—'}</td>
+    </tr>`;
+  }).join('');
+  el('check-empty').classList.toggle('hidden', result.results.length > 0);
+}
+
 // 列表上的操作用事件委托统一处理，列表重绘之后不需要重新绑定
 document.addEventListener('click', async (event) => {
   const node = event.target.closest('button');
@@ -330,6 +381,7 @@ el('zone-filter-dst').addEventListener('change', () => {
   loadZones().catch((err) => notify(err.message, 'error'));
 });
 el('convert-run').addEventListener('click', runConvert);
+el('check-run').addEventListener('click', runCheck);
 el('operator').addEventListener('change', () => {
   window.localStorage.setItem(OPERATOR_KEY, currentOperator());
 });

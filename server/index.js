@@ -61,6 +61,15 @@ app.post('/api/convert', (req, res) => {
   }
 });
 
+// 批量检查：一批时刻写法逐条给结论，单条不成立不影响其它条目，整批都不成立也照常返回
+app.post('/api/check', (req, res) => {
+  try {
+    res.json(api.checkBatch(req.body || {}));
+  } catch (err) {
+    sendError(res, err);
+  }
+});
+
 // 未匹配到的接口路径统一返回说明，避免前端拿到一串页面内容
 app.use('/api', (_req, res) => {
   res.status(404).json({ error: { code: 'API_NOT_FOUND', message: '接口不存在', field: '' } });

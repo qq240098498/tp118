@@ -374,3 +374,58 @@ label.full input {
   display: flex;
   gap: 10px;
 }
+
+textarea {
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+textarea.invalid {
+  border-color: var(--danger);
+  background: #fdf3f3;
+}
+
+.tag.bad {
+  background: #fdeeee;
+  color: var(--danger);
+}
+
+td.problem-cell {
+  max-width: 380px;
+  white-space: normal;
+}
+
+td.check-input {
+  max-width: 240px;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.problem-list {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.problem-list li {
+  margin: 2px 0;
+}
+
+.pos {
+  color: var(--ink-soft);
+  font-size: 11px;
+  white-space: nowrap;
+}
